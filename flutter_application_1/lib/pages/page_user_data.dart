@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import 'page_menu.dart';
 class UserListScreen extends StatelessWidget {
   const UserListScreen({super.key});
 
@@ -35,11 +35,22 @@ class UserListScreen extends StatelessWidget {
                 ),
 
                 // Home icon
-                const Icon(
-                  Icons.home,
-                  size: 30,
-                  color: Color(0xFFF6B26B),
+                IconButton(
+                  icon: const Icon(
+                    Icons.home,
+                    size: 30,
+                    color: Color(0xFFF6B26B),
+                  ),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const MenuUI(),
+                      ),
+                    );
+                  },
                 ),
+
               ],
             ),
           ),
@@ -47,91 +58,68 @@ class UserListScreen extends StatelessWidget {
           const SizedBox(height: 20),
 
           // First user (flat card)
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                _Avatar(),
-                const SizedBox(width: 16),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: const [
-                      Text(
-                        'Luis Fernando Herrera Perez',
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.w600,
-                          color: Color(0xFF6B4E9B),
-                        ),
-                      ),
-                      SizedBox(height: 6),
-                      Text(
-                        '555-555-555',
-                        style: TextStyle(
-                          fontSize: 16,
-                          color: Color(0xFF6B4E9B),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                const Icon(
-                  Icons.edit,
-                  color: Color(0xFF6B4E9B),
-                ),
-              ],
+          Container(
+            
+  height: 200,
+  width: double.infinity,
+  color: Colors.tealAccent,
+  
+  padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 20),
+  child: Row(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      _Avatar(),
+      const SizedBox(width: 16),
+      Expanded(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: const [
+            Text(
+              'Luis Fernando Herrera Perez',
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.w600,
+                color: Color(0xFF6B4E9B),
+              ),
             ),
-          ),
+            SizedBox(height: 6),
+            Text(
+              '555-555-555',
+              style: TextStyle(
+                fontSize: 16,
+                color: Color(0xFF6B4E9B),
+              ),
+            ),
+          ],
+        ),
+      ),
+      const Icon(Icons.edit, color: Color(0xFF6B4E9B)),
+    ],
+  ),
+),
+
 
           const SizedBox(height: 30),
 
           // Second user (rounded card)
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: Container(
-              padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: const Color(0xFFDDE8C8),
-                borderRadius: BorderRadius.circular(20),
-              ),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  _Avatar(),
-                  const SizedBox(width: 16),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: const [
-                        Text(
-                          'Leonardo Heriberto Rodriguez Piedra',
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.w600,
-                            color: Color(0xFF6B4E9B),
-                          ),
-                        ),
-                        SizedBox(height: 6),
-                        Text(
-                          '555-555-555',
-                          style: TextStyle(
-                            fontSize: 16,
-                            color: Color(0xFF6B4E9B),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  const Icon(
-                    Icons.edit,
-                    color: Color(0xFF6B4E9B),
-                  ),
-                ],
-              ),
-            ),
-          ),
+          SizedBox(
+  height: 400,
+  child: Center(
+    child: SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: Row(
+        children: [
+          _HorizontalUserBox(),
+          const SizedBox(width: 20),
+          _HorizontalUserBox(),
+          const SizedBox(width: 20),
+          _HorizontalUserBox(),
+        ],
+      ),
+    ),
+  ),
+),
+
 
           const Spacer(),
 
@@ -185,6 +173,50 @@ class _Avatar extends StatelessWidget {
             shape: BoxShape.circle,
           ),
         ),
+      ),
+    );
+  }
+}
+
+class _HorizontalUserBox extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 300,
+      height: 400,
+      decoration: BoxDecoration(
+        color: const Color(0xFFDDE8C8),
+        borderRadius: BorderRadius.circular(20),
+      ),
+      padding: const EdgeInsets.all(16),
+      child: Row(
+        children: [
+          _Avatar(),
+          const SizedBox(width: 16),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: const [
+                Text(
+                  'Usuario Demo',
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w600,
+                    color: Color(0xFF6B4E9B),
+                  ),
+                ),
+                SizedBox(height: 6),
+                Text(
+                  '555-555-555',
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Color(0xFF6B4E9B),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }

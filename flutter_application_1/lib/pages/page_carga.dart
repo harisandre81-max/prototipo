@@ -24,21 +24,24 @@ class _LoadingScreenState extends State<LoadingScreen> {
     super.initState();
 
     // Cambia la imagen cada 2 segundos
-    _timer = Timer.periodic(const Duration(seconds: 2), (timer) {
+    _timer = Timer.periodic(const Duration(seconds: 7), (timer) {
       setState(() {
         _currentIndex = (_currentIndex + 1) % _images.length;
       });
     });
 
-    // ⬇️ Navegación futura (cuando quieras activarla)
-    /*
-    Future.delayed(const Duration(seconds: 6), () {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (_) => const NextScreen()),
-      );
-    });
-    */
+Future<void> showLoading(BuildContext context, {int seconds = 2}) async {
+  showDialog(
+    context: context,
+    barrierDismissible: false,
+    builder: (_) => const LoadingScreen(),
+  );
+
+  await Future.delayed(Duration(seconds: seconds));
+
+  Navigator.of(context).pop(); // cerrar loading
+}
+
   }
 
   @override

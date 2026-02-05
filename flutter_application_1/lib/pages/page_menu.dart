@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-
+import 'page_user_data.dart';
+import 'page_home.dart';
 class MenuUI extends StatelessWidget {
   const MenuUI({super.key});
 
@@ -19,133 +20,165 @@ class MenuUI extends StatelessWidget {
             color: Colors.deepPurple,
           ),
         ),
-        actions: const [
+        actions: [
           Padding(
-            padding: EdgeInsets.only(right: 16),
-            child: Icon(
-              Icons.person,
-              color: Colors.orange,
+            padding: const EdgeInsets.only(right: 16),
+            child: IconButton(
+              icon: const Icon(
+                Icons.person,
+                color: Colors.orange,
+              ),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const UserListScreen(),
+                  ),
+                );
+              },
             ),
-          )
+          ),
         ],
       ),
 
-      body: Column(
+
+      body: Stack(
   children: [
 
-    const SizedBox(height: 20),
-
     // ===============================
-    // CONTENEDOR SUPERIOR (SCROLL HORIZONTAL)
-    // W: 388 / H: 398
+    // CONTENIDO NORMAL (CON SCROLL)
     // ===============================
-    Center(
-      child: Container(
-        width: 388,
-        height: 398,
-        decoration: BoxDecoration(
-          color: const Color(0xFFE6F0D5),
-          borderRadius: BorderRadius.circular(20),
-        ),
-        padding: const EdgeInsets.all(16),
-        child: SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          child: Row(
-            children: [
-              _HorizontalBox(),
-              const SizedBox(width: 23),
-              _HorizontalBox(),
-              const SizedBox(width: 23),
-              _HorizontalBox(),
-            ],
-          ),
-        ),
-      ),
-    ),
+    Column(
+      children: [
 
-    // ESPACIO ENTRE CONTENEDORES
-    const SizedBox(height: 83),
+        const SizedBox(height: 20),
 
-    // ===============================
-    // CONTENEDOR INFERIOR (SCROLL VERTICAL)
-    // W: 388 / H: 735
-    // ===============================
-    Center(
-      child: Container(
-        width: 388,
-        height: 735,
-        decoration: BoxDecoration(
-          color: const Color(0xFFE6F0D5),
-          borderRadius: BorderRadius.circular(20),
-        ),
-        padding: const EdgeInsets.all(16),
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              _VerticalBox(),
-              const SizedBox(height: 20),
-              _VerticalBox(),
-              const SizedBox(height: 20),
-              _VerticalBox(),
-              const SizedBox(height: 20),
-              _VerticalBox(),
-              const SizedBox(height: 20),
-              _VerticalBox(),
-              const SizedBox(height: 20),
-              _VerticalBox(),
-              const SizedBox(height: 20),
-              _VerticalBox(),
-              const SizedBox(height: 20),
-              _VerticalBox(),
-              const SizedBox(height: 20),
-              _VerticalBox(),
-              const SizedBox(height: 20),
-              _VerticalBox(),
-              const SizedBox(height: 20),
-              _VerticalBox(),
-              const SizedBox(height: 20),
-              _VerticalBox(),
-              const SizedBox(height: 20),
-              _VerticalBox(),
-            ],
-          ),
-        ),
-      ),
-    ),
+        Expanded(
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
 
-    const Spacer(),
-
-          // SUB MENÚ INFERIOR
-          Container(
-            height: 140,
-            width: double.infinity,
-            decoration: const BoxDecoration(
-              color: Color(0xFFE6F0D5),
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(40),
-                topRight: Radius.circular(40),
-              ),
-            ),
-            child: Center(
-              child: Container(
-                width: 90,
-                height: 90,
-                decoration: BoxDecoration(
-                  color: Colors.red,
-                  shape: BoxShape.circle,
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black26,
-                      blurRadius: 8,
-                      offset: Offset(0, 4),
+                // TU CONTENEDOR HORIZONTAL
+                Center(
+                  child: Container(
+                    width: 388,
+                    height: 398,
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFE6F0D5),
+                      borderRadius: BorderRadius.circular(20),
                     ),
+                    padding: const EdgeInsets.all(16),
+                    child: SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Row(
+                        children: [
+                          _HorizontalBox(),
+                          const SizedBox(width: 23),
+                          _HorizontalBox(),
+                          const SizedBox(width: 23),
+                          _HorizontalBox(),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+
+                const SizedBox(height: 83),
+
+                Column(
+                  children: [
+                    _VerticalBox(),
+                    const SizedBox(height: 20),
+                    _VerticalBox(),
+                    const SizedBox(height: 20),
+                    _VerticalBox(),
+                    const SizedBox(height: 20),
+                    _VerticalBox(),
                   ],
                 ),
-              ),
+
+                const SizedBox(height: 160), // espacio para el menú inferior
+              ],
             ),
           ),
-        ],
+        ),
+
+        
+    // ===============================
+    // SUB MENÚ INFERIOR (FIJO)
+    // ===============================
+    Container(
+      height: 140,
+      width: double.infinity,
+      decoration: const BoxDecoration(
+        color: Color(0xFFE6F0D5),
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(40),
+          topRight: Radius.circular(40),
+        ),
       ),
+      child: Center(
+        child: Container(
+          width: 90,
+          height: 90,
+          decoration: BoxDecoration(
+            color: Colors.red,
+            shape: BoxShape.circle,
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black26,
+                blurRadius: 8,
+                offset: Offset(0, 4),
+              ),
+            ],
+          ),
+        ),
+      ),
+    ),
+      ],
+    ),
+
+    // ===============================
+    // BOTÓN FLOTANTE FIJO
+    // ===============================
+    Positioned(
+      right: 16,
+      top: MediaQuery.of(context).size.height / 2 - 20,
+      child: GestureDetector(
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const HomePage(),
+            ),
+          );
+        },
+        child: Container(
+          width: 40,
+          height: 40,
+          decoration: BoxDecoration(
+            color: Colors.orange,
+            shape: BoxShape.circle,
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black26,
+                blurRadius: 6,
+                offset: Offset(0, 3),
+              ),
+            ],
+          ),
+          child: const Icon(
+            Icons.add,
+            color: Colors.white,
+            size: 22,
+          ),
+        ),
+      ),
+    ),
+  ],
+),
+
+
     );
   }
 }
@@ -170,7 +203,7 @@ class _VerticalBox extends StatelessWidget {
       width: 386,
       height: 87,
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: const Color.fromARGB(255, 145, 55, 55),
         borderRadius: BorderRadius.circular(16),
       ),
     );

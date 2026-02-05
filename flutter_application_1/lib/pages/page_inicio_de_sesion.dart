@@ -81,8 +81,7 @@ class Inicio_de_sesion extends StatelessWidget {
 
                     // BOTONES
                         // SIGUIENTE
-                        Expanded(
-                          child: GestureDetector(
+                          GestureDetector(
                             onTap: () {
                               Navigator.push(
                                 context,
@@ -91,10 +90,9 @@ class Inicio_de_sesion extends StatelessWidget {
                                 ),
                               );
                             },
-
-                            //modificar tamaño
                             child: Container(
-                              height: 56,
+                              height: 56, // 👈 aquí sí se respeta
+                              width: double.infinity,
                               decoration: BoxDecoration(
                                 color: const Color(0xFFFFB562),
                                 borderRadius: BorderRadius.circular(30),
@@ -103,7 +101,7 @@ class Inicio_de_sesion extends StatelessWidget {
                                 child: Text(
                                   'SIGUIENTE',
                                   style: TextStyle(
-                                    fontSize: 16,
+                                    fontSize: 12,
                                     fontWeight: FontWeight.w600,
                                     color: Colors.white,
                                   ),
@@ -111,7 +109,7 @@ class Inicio_de_sesion extends StatelessWidget {
                               ),
                             ),
                           ),
-                        ),
+              
                   ],
                 ),
               ),
