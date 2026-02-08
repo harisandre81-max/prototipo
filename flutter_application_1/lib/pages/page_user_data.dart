@@ -90,14 +90,6 @@ class UserListScreen extends StatelessWidget {
                 color: Color(0xFF6B4E9B),
               ),
             ),
-          ],
-        ),
-      ),
-      const Icon(Icons.edit, color: Color(0xFF6B4E9B)),
-    ],
-  ),
-),
-
 
           const SizedBox(height: 30),
 
