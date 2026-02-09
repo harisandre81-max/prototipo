@@ -3,6 +3,7 @@ import 'page_user_data.dart';
 import 'page_inicio_de_sesion.dart';
 import 'page_carga.dart';
 import 'dart:async';
+import 'package:url_launcher/url_launcher.dart';
 
 class MenuUI extends StatelessWidget {
   const MenuUI({super.key});
@@ -668,6 +669,7 @@ class _EmergencyPopupState extends State<EmergencyPopup>
   }
 }
 
+// MODELO (siempre fuera del widget)
 class InstitucionInfo {
   final String name;
   final String phone;
@@ -683,7 +685,8 @@ class InstitucionInfo {
     required this.image,
   });
 }
-//mas info
+
+  //mas info
 void showDetailCard(BuildContext context, InstitucionInfo user) {
   showGeneralDialog(
     context: context,
@@ -697,6 +700,8 @@ void showDetailCard(BuildContext context, InstitucionInfo user) {
     alignment: Alignment.bottomCenter, 
     child: Padding(
       padding: const EdgeInsets.only(bottom: 40),
+      child: Material(
+  color: Colors.transparent,
         child: Container(
           width: 388,
           height: 300,
@@ -706,38 +711,63 @@ void showDetailCard(BuildContext context, InstitucionInfo user) {
             borderRadius: BorderRadius.circular(20),
           ),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              CircleAvatar(
-                radius: 30,
-                backgroundImage: AssetImage(user.image),
-              ),
-              const SizedBox(height: 12),
-              Text(user.name,
-                  style: const TextStyle(
-                      fontWeight: FontWeight.w600,
-                      fontSize: 12,
-                      color: Colors.deepPurple)),
-              const SizedBox(height: 8),
-              Text(user.phone,
-                  style: const TextStyle(
-                      fontWeight: FontWeight.w600,
-                      fontSize: 12,
-                      color: Colors.deepPurple)),
-              const SizedBox(height: 8),
-              Text(user.address,
-                  style: const TextStyle(
-                      fontWeight: FontWeight.w600,
-                      fontSize: 12,
-                      color: Colors.deepPurple)),
-              const SizedBox(height: 8),
-              Text(user.description,
-                  style: const TextStyle(
-                      fontWeight: FontWeight.w600,
-                      fontSize: 12,
-                      color: Colors.deepPurple)),
+              // HEADER
+    Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        CircleAvatar(
+          radius: 30,
+          backgroundImage: AssetImage(user.image),
+        ),
+        const SizedBox(width: 12),
+        Expanded(
+          child: Text(
+            user.name,
+            style: const TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.w600,
+              color: Colors.deepPurple,
+            ),
+          ),
+        ),
+      ],
+    ),
+
+    const SizedBox(height: 16),
+
+    // INFO
+    InkWell(
+  onTap: () async {
+     final uri = Uri.parse('tel:6751107805');
+    await launchUrl(uri, mode: LaunchMode.externalApplication);
+  },
+    child: Text(
+      user.phone,
+      textAlign: TextAlign.justify,
+      style: const TextStyle(fontSize: 18, 
+      color: Colors.deepPurple,
+      fontWeight: FontWeight.w500,
+      decoration: TextDecoration.underline,),
+      ),
+  ),
+    const SizedBox(height: 8),
+    Text(
+      user.address,
+      textAlign: TextAlign.justify,
+      style: const TextStyle(fontSize: 18, color: Colors.deepPurple,),
+    ),
+    const SizedBox(height: 8),
+    Text(
+      user.description,
+      textAlign: TextAlign.justify,
+      style: const TextStyle(fontSize: 18, color: Colors.deepPurple,),
+    ),
             ],
           ),
         ),
+      ),
       ),
       );
     },
@@ -755,4 +785,82 @@ void showDetailCard(BuildContext context, InstitucionInfo user) {
       );
     },
   );
+}
+
+// CARD
+class InstitucionDetailCard extends StatelessWidget {
+  final InstitucionInfo data;
+  const InstitucionDetailCard({super.key, required this.data});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 388,
+      height: 300,
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // HEADER
+          Row(
+            children: [
+              const SizedBox(width: 56, height: 56),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Text(
+                  data.name,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+            ],
+          ),
+
+          const SizedBox(height: 16),
+
+          _InfoRow(label: 'Dirección:', value: data.address),
+          const SizedBox(height: 8),
+          _InfoRow(label: 'Número:', value: data.phone),
+
+          const SizedBox(height: 12),
+
+          Expanded(
+            child: Text(
+              data.description,
+              textAlign: TextAlign.justify,
+              overflow: TextOverflow.fade,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _InfoRow extends StatelessWidget {
+  final String label;
+  final String value;
+
+  const _InfoRow({required this.label, required this.value});
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        SizedBox(width: 80, child: Text(label)),
+        const SizedBox(width: 8),
+        Expanded(
+          child: Text(
+            value,
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+          ),
+        ),
+      ],
+    );
+  }
 }
