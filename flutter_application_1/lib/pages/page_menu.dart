@@ -99,21 +99,11 @@ class MenuUI extends StatelessWidget {
                       scrollDirection: Axis.horizontal,
                       child: Row(
                         children: [
-                          _VerticalUserCard(
-                            name: 'Josh Fechter',
-                            age: '32',
-                            relation: 'Hermano',
-                            phone: '+88 01828 9457 20',
-                            image: 'assets/avatar.png',
+                          ContactCard(
                           ),
 
                           const SizedBox(width: 23),
-                          _VerticalUserCard(
-                            name: 'Josh Fechter',
-                            age: '32',
-                            relation: 'Hermano',
-                            phone: '+88 01828 9457 20',
-                            image: 'assets/avatar.png',
+                          ContactCard(                          
                           ),
 
                         ],
@@ -152,7 +142,7 @@ class MenuUI extends StatelessWidget {
       onTap: () {
     showDetailCard(
       context,
-      UserInfo(
+      InstitucionInfo(
         name: 'Josh Fechter',
         phone: '+88 01828 9457 20',
         address: 'Ciudad de México',
@@ -169,7 +159,7 @@ class MenuUI extends StatelessWidget {
       onTap: () {
     showDetailCard(
       context,
-      UserInfo(
+      InstitucionInfo(
         name: 'Fechter',
         phone: '+88 01828 9457 20',
         address: 'Ciudad de México',
@@ -186,7 +176,7 @@ class MenuUI extends StatelessWidget {
       onTap: () {
     showDetailCard(
       context,
-      UserInfo(
+      InstitucionInfo(
         name: 'Josh Fer',
         phone: '+88 01828 9457 20',
         address: 'Ciudad de México',
@@ -294,64 +284,137 @@ class MenuUI extends StatelessWidget {
     );
   }
 }
-class _VerticalUserCard extends StatelessWidget {
-  final String name;
-  final String age;
-  final String relation;
-  final String phone;
-  final String image;
 
-  const _VerticalUserCard({
-    required this.name,
-    required this.age,
-    required this.relation,
-    required this.phone,
-    required this.image,
-  });
+class ContactCard extends StatefulWidget {
+  const ContactCard({super.key});
+
+  @override
+  State<ContactCard> createState() => _ContactCardState();
+}
+
+class _ContactCardState extends State<ContactCard> {
+  String nombre = 'Josh Fechter';
+  String edad = '32';
+  String parentesco = 'Hermano';
+  String telefono = '+88 01828 9457 20';
 
   @override
   Widget build(BuildContext context) {
     return Container(
       width: 360,
       height: 180,
-      padding: const EdgeInsets.all(12),
+      padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: const Color.fromARGB(237, 255, 255, 255),
+        color: const Color(0xFFF7F3FF),
         borderRadius: BorderRadius.circular(16),
       ),
       child: Row(
         children: [
-          // IMAGEN
-          CircleAvatar(
-            radius: 50,
-            backgroundImage: AssetImage(image), // o NetworkImage
+          // Avatar
+          Container(
+            width: 80,
+            height: 80,
+            decoration: const BoxDecoration(
+              color: Color(0xFFE6D9FF),
+              shape: BoxShape.circle,
+            ),
           ),
+          const SizedBox(width: 16),
 
-          const SizedBox(width: 32),
-
-          // INFO
+          // Info
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text(name,
-                    style: const TextStyle(
-                        fontWeight: FontWeight.w600,
-                        fontSize: 18,
-                        color: Colors.deepPurple)),
+                Row(
+                  children: [
+                    Expanded(
+                      child: Text( nombre,
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: Color(0xFF5E3AA1),
+                        ),
+                      ),
+                    ),
+                    IconButton(
+                      icon: const Icon(Icons.edit, size: 20,
+                      color: Color(0xFF5E3AA1),),
+                      onPressed: _editCard,
+                    )
+                  ],
+                ),
                 const SizedBox(height: 8),
-                Text('Edad: $age'),
-                Text('Parentezco: $relation'),
-                Text(phone),
+                 Text('Edad: $edad', style: const TextStyle(color: Color(0xFF5E3AA1))),
+                 Text('Parentezco: $parentesco', style: const TextStyle(color: Color(0xFF5E3AA1))),
+                 Text(telefono, style: const TextStyle(color: Color(0xFF5E3AA1))),
+
               ],
             ),
-          ),
+          )
         ],
       ),
     );
   }
+    void _editCard() {
+    final nameCtrl = TextEditingController(text: nombre);
+    final ageCtrl = TextEditingController(text: edad);
+    final relationCtrl = TextEditingController(text: parentesco);
+    final phoneCtrl = TextEditingController(text: telefono);
+
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+       builder: (_) => Align(
+    alignment: Alignment.topCenter,
+    child: Container(
+      margin: const EdgeInsets.only(top: 150),
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+      ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            TextField(controller: nameCtrl, decoration: const InputDecoration(labelText: 'Nombre')),
+            TextField(controller: ageCtrl, decoration: const InputDecoration(labelText: 'Edad')),
+            TextField(controller: relationCtrl, decoration: const InputDecoration(labelText: 'Parentezco')),
+            TextField(controller: phoneCtrl, decoration: const InputDecoration(labelText: 'Teléfono')),
+            const SizedBox(height: 16),
+            Row(
+  mainAxisAlignment: MainAxisAlignment.end,
+  children: [
+    TextButton(
+      onPressed: () => Navigator.pop(context),
+      child: const Text('Cancelar'),
+    ),
+    const SizedBox(width: 8),
+    ElevatedButton(
+      onPressed: () {
+        setState(() {
+          nombre = nameCtrl.text;
+          edad = ageCtrl.text;
+          parentesco = relationCtrl.text;
+          telefono = phoneCtrl.text;
+        });
+        Navigator.pop(context);
+      },
+      child: const Text('Guardar'),
+    ),
+  ],
+),
+
+          ],
+        ),
+      ),
+       ),
+    );
+  }
+
 }
+
 
 
 class _VerticalBox extends StatelessWidget {
@@ -467,6 +530,8 @@ class _EmergencyPopupState extends State<EmergencyPopup>
   int _countdown = 3;
   Timer? _timer;
   late AnimationController _anim;
+  bool _sent = false;
+
 
   @override
   void initState() {
@@ -482,15 +547,25 @@ class _EmergencyPopupState extends State<EmergencyPopup>
 
     // Contador
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
-      if (_countdown == 1) {
-        timer.cancel();
-        // 👉 AQUÍ disparas la acción real
-        print('🚨 EMERGENCIA ACTIVADA');
-      }
-      setState(() {
-        _countdown--;
-      });
+  if (_countdown == 1) {
+    timer.cancel();
+
+    setState(() {
+      _countdown = 0;
+      _sent = true;
     });
+
+    // simula envío y cierra el popup
+    Future.delayed(const Duration(seconds: 2), () {
+      if (mounted) Navigator.pop(context);
+    });
+
+  } else {
+    setState(() {
+      _countdown--;
+    });
+  }
+});
   }
 
   @override
@@ -508,6 +583,8 @@ class _EmergencyPopupState extends State<EmergencyPopup>
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            
+
             ScaleTransition(
               scale: _anim,
               child: CircleAvatar(
@@ -526,14 +603,15 @@ class _EmergencyPopupState extends State<EmergencyPopup>
 
             const SizedBox(height: 100),
 
-            const Text(
-              'Enviando alerta en...',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 22,
-                fontWeight: FontWeight.w600,
-              ),
+             Text(
+            _sent ? '🚨 Alerta enviada' : 'Enviando alerta en...',
+            style: const TextStyle(
+              color: Colors.white,
+              fontSize: 22,
+              fontWeight: FontWeight.w600,
             ),
+          ),
+
 
             const SizedBox(height: 10),
 
@@ -590,14 +668,14 @@ class _EmergencyPopupState extends State<EmergencyPopup>
   }
 }
 
-class UserInfo {
+class InstitucionInfo {
   final String name;
   final String phone;
   final String address;
   final String description;
   final String image;
 
-  UserInfo({
+  InstitucionInfo({
     required this.name,
     required this.phone,
     required this.address,
@@ -606,7 +684,7 @@ class UserInfo {
   });
 }
 //mas info
-void showDetailCard(BuildContext context, UserInfo user) {
+void showDetailCard(BuildContext context, InstitucionInfo user) {
   showGeneralDialog(
     context: context,
     barrierDismissible: true,
