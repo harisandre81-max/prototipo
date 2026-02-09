@@ -1,22 +1,21 @@
 import 'package:flutter/material.dart';
-import 'page_inicio_registro_contactos2.dart';
+import 'page_inicio_registro_contactos3.dart';
 import 'page_menu.dart';
 import 'page_carga.dart';
-class Contact extends StatefulWidget {
-  const Contact({super.key});
+class Contact2 extends StatefulWidget {
+  const Contact2({super.key});
 
   @override
-  State<Contact> createState() => _ContactState();
+  State<Contact2> createState() => _Contact2State();
 }
 
-class _ContactState extends State<Contact> {
+class _Contact2State extends State<Contact2> {
    final TextEditingController nomController = TextEditingController();
     final TextEditingController edadController = TextEditingController();
     final TextEditingController telController = TextEditingController();
     final TextEditingController parentezcoController = TextEditingController();
     final _formKey = GlobalKey<FormState>();
 
-  
   Future<void> showLoading(BuildContext context, {int seconds = 3}) async {
   showDialog(
     context: context,
@@ -27,6 +26,7 @@ class _ContactState extends State<Contact> {
   await Future.delayed(Duration(seconds: seconds));
   Navigator.of(context).pop();
 }
+
 
   @override
     void dispose() {
@@ -98,7 +98,7 @@ class _ContactState extends State<Contact> {
                       Padding(
                         padding: EdgeInsets.only(right: 100),
                         child: Text(
-                          '1',
+                          '2',
                           style: TextStyle(
                             fontSize: 22,
                             fontWeight: FontWeight.w600,
@@ -109,7 +109,7 @@ class _ContactState extends State<Contact> {
                       ],
                     ),
                   const SizedBox(height: 20),
-                    Form(
+                     Form(
                       key: _formKey,
                       child: Column(
                         children: [
@@ -180,7 +180,7 @@ class _ContactState extends State<Contact> {
                         // OMITIR
                        Expanded(
                         child: GestureDetector(
-                          onTap: () async {
+                          onTap: () async{
                             await showLoading(context, seconds: 3);
                             Navigator.push(
                               context,
@@ -219,7 +219,7 @@ class _ContactState extends State<Contact> {
                                 await showLoading(context, seconds: 3);
                                 Navigator.push(
                                   context,
-                                  MaterialPageRoute(builder: (context) => const Contact2()),
+                                  MaterialPageRoute(builder: (context) => const Contact3()),
                                 );
                               }
                             },
@@ -243,8 +243,10 @@ class _ContactState extends State<Contact> {
                             ),
                           ),
                         ),
+
                       ],
                     ),
+
                   ],
                 ),
               ),
@@ -258,13 +260,13 @@ class _ContactState extends State<Contact> {
 }
 
 
+
 // INPUT VISUAL 
 class _InputBox extends StatelessWidget {
     final String text;
   final TextEditingController controller;
   final String? Function(String?)? validator;
   final TextInputType keyboardType;
-  
 
   const _InputBox({
     required this.text,
@@ -317,7 +319,7 @@ class _InputBox extends StatelessWidget {
           borderRadius: BorderRadius.circular(20),
           borderSide: const BorderSide(color: Colors.red),
         ),
-      ),
+      ), 
     );
   }
 }

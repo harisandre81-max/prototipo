@@ -10,43 +10,27 @@ class LoadingScreen extends StatefulWidget {
 
 class _LoadingScreenState extends State<LoadingScreen> {
   int _currentIndex = 0;
-  late Timer _timer;
+  Timer? _timer;
 
-  // Lista de imágenes (assets)
   final List<String> _images = [
-    'assets/images/logo1.png',
-    'assets/images/logo2.png',
-    'assets/images/logo3.png',
+    'assets/imagenes/img1.jpeg',
+    'assets/imagenes/img2.jpeg',
   ];
 
   @override
   void initState() {
     super.initState();
 
-    // Cambia la imagen cada 2 segundos
-    _timer = Timer.periodic(const Duration(seconds: 7), (timer) {
+    _timer = Timer.periodic(const Duration(seconds: 1), (_) {
       setState(() {
         _currentIndex = (_currentIndex + 1) % _images.length;
       });
     });
-
-Future<void> showLoading(BuildContext context, {int seconds = 2}) async {
-  showDialog(
-    context: context,
-    barrierDismissible: false,
-    builder: (_) => const LoadingScreen(),
-  );
-
-  await Future.delayed(Duration(seconds: seconds));
-
-  Navigator.of(context).pop(); // cerrar loading
-}
-
   }
 
   @override
   void dispose() {
-    _timer.cancel();
+    _timer?.cancel();
     super.dispose();
   }
 
@@ -56,23 +40,26 @@ Future<void> showLoading(BuildContext context, {int seconds = 2}) async {
       backgroundColor: const Color(0xFFE6EED2),
       body: Center(
         child: AnimatedSwitcher(
-          duration: const Duration(milliseconds: 600),
-          transitionBuilder: (child, animation) {
-            return FadeTransition(
-              opacity: animation,
-              child: ScaleTransition(
-                scale: animation,
-                child: child,
-              ),
-            );
-          },
-          child: Image.asset(
-            _images[_currentIndex],
-            key: ValueKey(_images[_currentIndex]),
-            width: 220,
-            fit: BoxFit.contain,
-          ),
-        ),
+  duration: const Duration(milliseconds: 500),
+  switchInCurve: Curves.easeIn,
+  switchOutCurve: Curves.easeOut,
+  transitionBuilder: (child, animation) {
+    return FadeTransition(
+      opacity: animation,
+      child: child,
+    );
+  },
+  child: SizedBox(
+    key: ValueKey(_currentIndex),
+    width: 220,
+    height: 220,
+    child: Image.asset(
+      _images[_currentIndex],
+      fit: BoxFit.contain,
+    ),
+  ),
+),
+
       ),
     );
   }

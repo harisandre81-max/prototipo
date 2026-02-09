@@ -1,211 +1,277 @@
 import 'package:flutter/material.dart';
-import 'page_menu.dart';
-class UserListScreen extends StatelessWidget {
-  const UserListScreen({super.key});
+import 'dart:io';
+import 'package:image_picker/image_picker.dart';
+
+class UserProfilePage extends StatefulWidget {
+  const UserProfilePage({super.key});
+  
+  @override
+  State<UserProfilePage> createState() => _UserProfilePageState();
+}
+
+class _UserProfilePageState extends State<UserProfilePage> {
+  String userName = 'Luis Fernando Herrera';
+  String email = 'luis@email.com';
+  String phone = '555 555 5555';
+  String age = '25';
+  String city = 'Ciudad de México';
+
+  
+  File? _profileImage;
+final ImagePicker _picker = ImagePicker();
+
+  void _editName(BuildContext context) {
+    final controller = TextEditingController(text: userName);
+
+    showDialog(
+      context: context,
+      builder: (_) => AlertDialog(
+        title: const Text('Editar nombre'),
+        content: TextField(
+          controller: controller,
+          decoration: const InputDecoration(
+            hintText: 'Nombre completo',
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Cancelar'),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              setState(() {
+                userName = controller.text;
+              });
+              Navigator.pop(context);
+            },
+            child: const Text('Guardar'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _editField({
+  required String title,
+  required String initialValue,
+  required Function(String) onSave,
+}) {
+  final controller = TextEditingController(text: initialValue);
+
+  showDialog(
+    context: context,
+    builder: (_) => AlertDialog(
+      title: Text(title),
+      content: TextField(controller: controller),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.pop(context),
+          child: const Text('Cancelar'),
+        ),
+        ElevatedButton(
+          onPressed: () {
+            setState(() => onSave(controller.text));
+            Navigator.pop(context);
+          },
+          child: const Text('Guardar'),
+        ),
+      ],
+    ),
+  );
+}
+
+
+  Future<void> _pickImage() async {
+  final XFile? image = await _picker.pickImage(
+    source: ImageSource.gallery,
+  );
+
+  if (image != null) {
+    setState(() {
+      _profileImage = File(image.path);
+    });
+  }
+}
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF9F7ED),
-      body: Column(
-        children: [
-          // Header
-          Container(
-            height: 120,
-            width: double.infinity,
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            decoration: const BoxDecoration(
-              color: Color(0xFFDDE8C8),
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                // Logo placeholder
-                Container(
-                  width: 48,
-                  height: 48,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: const Icon(
-                    Icons.shield,
-                    color: Color(0xFF7A8F4E),
-                  ),
-                ),
-
-                // Home icon
-                IconButton(
-                  icon: const Icon(
-                    Icons.home,
-                    size: 30,
-                    color: Color(0xFFF6B26B),
-                  ),
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const MenuUI(),
-                      ),
-                    );
-                  },
-                ),
-
-              ],
-            ),
+      backgroundColor: const Color.fromARGB(255, 255, 255, 255),
+      appBar: AppBar(
+        centerTitle: true,
+        backgroundColor: const Color(0xFFE6F0D5),
+        elevation: 0,
+        title: const Text(
+          'Perfil',
+          style: TextStyle(
+            color: Colors.deepPurple,
+            fontWeight: FontWeight.w600,
           ),
-
-          const SizedBox(height: 20),
-
-          // First user (flat card)
-          Container(
-            
-  height: 200,
-  width: double.infinity,
-  color: Colors.tealAccent,
-  
-  padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 20),
-  child: Row(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: [
-      _Avatar(),
-      const SizedBox(width: 16),
-      Expanded(
+        ),
+        iconTheme: const IconThemeData(color: Colors.deepPurple),
+      ),
+      body: SingleChildScrollView(
+    child: Padding(
+        padding: const EdgeInsets.all(20),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: const [
-            Text(
-              'Luis Fernando Herrera Perez',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.w600,
-                color: Color(0xFF6B4E9B),
-              ),
-            ),
-            SizedBox(height: 6),
-            Text(
-              '555-555-555',
-              style: TextStyle(
-                fontSize: 16,
-                color: Color(0xFF6B4E9B),
-              ),
-            ),
+          children: [
+            
+             const SizedBox(height: 30),
 
-          const SizedBox(height: 30),
+            // FOTO DE PERFIL
+            Stack(
+  alignment: Alignment.bottomRight,
+  children: [
+    CircleAvatar(
+      radius: 60,
+      backgroundColor: const Color.fromARGB(255, 255, 227, 227),
+      backgroundImage: _profileImage != null
+      ? FileImage(_profileImage!)
+      : const AssetImage('assets/avatar.png') as ImageProvider,
+    ),
 
-          // Second user (rounded card)
-          SizedBox(
-  height: 400,
-  child: Center(
-    child: SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
-      child: Row(
-        children: [
-          _HorizontalUserBox(),
-          const SizedBox(width: 20),
-          _HorizontalUserBox(),
-          const SizedBox(width: 20),
-          _HorizontalUserBox(),
-        ],
+    GestureDetector(
+      onTap: () {
+         _pickImage();
+        print('Editar foto');
+      },
+      child: Container(
+        padding: const EdgeInsets.all(6),
+        decoration: const BoxDecoration(
+          color: Colors.deepPurple,
+          shape: BoxShape.circle,
+        ),
+        child: const Icon(
+          Icons.edit,
+          size: 18,
+          color: Colors.white,
+        ),
       ),
     ),
-  ),
+  ],
+),
+
+            const SizedBox(height: 30),
+
+            // NOMBRE
+            Row(
+  mainAxisAlignment: MainAxisAlignment.center,
+  children: [
+    Text(
+      userName,
+      style: const TextStyle(
+        fontSize: 20,
+        fontWeight: FontWeight.w600,
+        color: Colors.deepPurple,
+      ),
+    ),
+    const SizedBox(width: 8),
+    GestureDetector(
+      onTap: () => _editName(context),
+      child: const Icon(
+        Icons.edit,
+        size: 18,
+        color: Colors.deepPurple,
+      ),
+    ),
+  ],
 ),
 
 
-          const Spacer(),
 
-          // Emergency button
-          Padding(
-            padding: const EdgeInsets.only(bottom: 24),
-            child: Container(
-              width: 90,
-              height: 90,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                gradient: const RadialGradient(
-                  colors: [
-                    Color(0xFFFF3B30),
-                    Color(0xFFB00000),
-                  ],
-                ),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.25),
-                    blurRadius: 8,
-                    offset: const Offset(0, 4),
-                  ),
-                ],
+            const SizedBox(height: 100),
+
+            // DATOS
+            _InfoTile(
+              text: email,
+              icon: Icons.email,
+              onEdit: () => _editField(
+                title: 'Editar email',
+                initialValue: email,
+                onSave: (v) => email = v,
+              ),
+            ),
+
+            _InfoTile(
+              text: phone,
+              icon: Icons.phone,
+              onEdit: () => _editField(
+                title: 'Editar teléfono',
+                initialValue: phone,
+                onSave: (v) => phone = v,
+              ),
+            ),
+
+            _InfoTile(
+              text: age,
+              icon: Icons.cake,
+              onEdit: () => _editField(
+                title: 'Editar edad',
+                initialValue: age,
+                onSave: (v) => age = v,
+              ),
+            ),
+
+            _InfoTile(
+              text: city,
+              icon: Icons.location_on,
+              onEdit: () => _editField(
+                title: 'Editar ciudad',
+                initialValue: city,
+                onSave: (v) => city = v,
+              ),
+            ),
+
+          ],
+        ),
+      ),
+      ),
+    );
+  }
+}
+
+class _InfoTile extends StatelessWidget {
+  final IconData icon;
+  final String text;
+  final VoidCallback onEdit;
+
+  const _InfoTile({
+    required this.icon,
+    required this.text,
+    required this.onEdit,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 12),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+      decoration: BoxDecoration(
+        color: const Color.fromARGB(255, 255, 222, 222),
+        borderRadius: BorderRadius.circular(16),
+      ),
+      child: Row(
+        children: [
+          Icon(icon, color: Colors.deepPurple),
+          const SizedBox(width: 12),
+
+          Expanded(
+            child: Text(
+              text,
+              style: const TextStyle(
+                fontSize: 14,
+                color: Colors.deepPurple,
               ),
             ),
           ),
-        ],
-      ),
-    );
-  }
-}
 
-// Avatar widget
-class _Avatar extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: 72,
-      height: 72,
-      decoration: BoxDecoration(
-        color: const Color(0xFFEFF3E6),
-        shape: BoxShape.circle,
-      ),
-      child: Center(
-        child: Container(
-          width: 44,
-          height: 44,
-          decoration: const BoxDecoration(
-            color: Color(0xFFF6B26B),
-            shape: BoxShape.circle,
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class _HorizontalUserBox extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: 300,
-      height: 400,
-      decoration: BoxDecoration(
-        color: const Color(0xFFDDE8C8),
-        borderRadius: BorderRadius.circular(20),
-      ),
-      padding: const EdgeInsets.all(16),
-      child: Row(
-        children: [
-          _Avatar(),
-          const SizedBox(width: 16),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: const [
-                Text(
-                  'Usuario Demo',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w600,
-                    color: Color(0xFF6B4E9B),
-                  ),
-                ),
-                SizedBox(height: 6),
-                Text(
-                  '555-555-555',
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: Color(0xFF6B4E9B),
-                  ),
-                ),
-              ],
+          GestureDetector(
+            onTap: onEdit,
+            child: const Icon(
+              Icons.edit,
+              size: 18,
+              color: Colors.deepPurple,
             ),
           ),
         ],
@@ -213,3 +279,4 @@ class _HorizontalUserBox extends StatelessWidget {
     );
   }
 }
+

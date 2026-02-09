@@ -69,7 +69,7 @@ class LoginShellUI extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => const Inicio_de_sesion(),
+                    builder: (context) => const InicioDeSesion(),
                   ),
                 );
               },

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'pages/page_home.dart';
+import 'package:flutter_application_1/pages/page_menu.dart';
+import 'pages/page_inicio_de_sesion.dart';
+import 'pages/page_menu.dart';
 
 //raiz de la interfaz
 void main() {
@@ -12,13 +14,13 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      debugShowCheckedModeBanner: false,
+      debugShowCheckedModeBanner: false,  
       title: 'Mi App',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const HomePage(),//llama la pantalla
+      home: const InicioDeSesion(),//llama la pantalla
     );
   }
 }
