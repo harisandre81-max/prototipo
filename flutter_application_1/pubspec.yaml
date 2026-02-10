@@ -30,6 +30,9 @@ environment:
 dependencies:
   image_picker: ^1.0.7
   url_launcher: ^6.2.1
+  geolocator: ^11.0.0
+  permission_handler: ^11.3.0
+
   flutter:
     sdk: flutter
    
@@ -59,7 +62,7 @@ flutter_launcher_icons:
   android: true
   ios: true
   remove_alpha_ios: true
-  image_path: "assets/logo_app/Logo_Aplication.png"
+  image_path: "assets/logo_app/logo_app.jpeg"
 
 # The following section is specific to Flutter packages.
 flutter:

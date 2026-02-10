@@ -53,10 +53,9 @@ class InicioDeSesionState extends State<InicioDeSesion> {
                 color: Colors.transparent,
                 borderRadius: BorderRadius.circular(20),
               ),
-              child: Icon(
-                Icons.shield,
-                size: 90,
-                color: Colors.deepPurple,
+              child: Image.asset(
+                'assets/logo_app.jpeg',
+                fit: BoxFit.contain,
               ),
             ),
 

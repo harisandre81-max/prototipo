@@ -4,6 +4,9 @@ import 'page_inicio_de_sesion.dart';
 import 'page_carga.dart';
 import 'dart:async';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class MenuUI extends StatelessWidget {
   const MenuUI({super.key});
@@ -53,7 +56,7 @@ class MenuUI extends StatelessWidget {
               icon: const Icon(
                 size: 36,
                 Icons.person,
-                color: Colors.orange,
+                color: Color(0xFFFFB562),
               ),
               onPressed: () async{
                 await showLoading(context, seconds: 3);
@@ -113,7 +116,7 @@ class MenuUI extends StatelessWidget {
                   ),
                 ),
 
-                const SizedBox(height: 100),
+                const SizedBox(height: 80),
                 SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   child: Row(
@@ -121,21 +124,28 @@ class MenuUI extends StatelessWidget {
                       const SizedBox(width: 20),
 
                       _HorizontalButton(
-                        text: 'Tipos de violencia',
-                        image: 'assets/imagenes/img1.jpeg',
+                        text: 'Cultura de la paz',
+                        image: 'assets/imagenes/info_culturapaz.jpeg',
                       ),
                       const SizedBox(width: 16),
 
                       _HorizontalButton(
                         text: 'Derechos de los nna',
-                        image: 'assets/imagenes/img2.jpeg',
+                        image: 'assets/imagenes/info_derechosnna.jpeg',
                       ),
+                      const SizedBox(width: 16),
+
+                      _HorizontalButton(
+                        text: 'Tipos de violencia',
+                        image: 'assets/imagenes/info_tiposdeviolencia.jpeg',
+                      ),
+
 
                       const SizedBox(width: 20),
                     ],
                   ),
                 ),
-                const SizedBox(height: 40),
+                const SizedBox(height: 80),
                 Column(
   children: [
     _VerticalBox(
@@ -190,7 +200,7 @@ class MenuUI extends StatelessWidget {
   ],
 ),
 
-                const SizedBox(height: 20), // espacio para el menú inferior
+                const SizedBox(height: 60), // espacio para el menú inferior
               ],
             ),
           ),
@@ -222,7 +232,7 @@ class MenuUI extends StatelessWidget {
           width: 100,
           height: 100,
           decoration: BoxDecoration(
-            color: Colors.red,
+            color: Color.fromARGB(255, 255, 98, 98),
             shape: BoxShape.circle,
             boxShadow: [
               BoxShadow(
@@ -260,7 +270,7 @@ class MenuUI extends StatelessWidget {
           width: 50,
           height: 50,
           decoration: BoxDecoration(
-            color: Colors.orange,
+            color:  Color(0xFFFFB562),
             shape: BoxShape.circle,
             boxShadow: [
               BoxShadow(
@@ -501,7 +511,7 @@ Widget build(BuildContext context) {
       width: 200,
       height: 50,
       decoration: BoxDecoration(
-        color: Colors.orange,
+        color:  Color(0xFFFFB562),
         borderRadius: BorderRadius.circular(25),
       ),
       child: Center(
@@ -528,6 +538,29 @@ class EmergencyPopup extends StatefulWidget {
 
 class _EmergencyPopupState extends State<EmergencyPopup>
     with SingleTickerProviderStateMixin {
+
+      Future<String> getLocation() async {
+  final permission = await Permission.location.request();
+  if (!permission.isGranted) return 'Ubicación no permitida';
+
+  final position = await Geolocator.getCurrentPosition(
+    desiredAccuracy: LocationAccuracy.high,
+  );
+
+  return 'https://maps.google.com/?q=${position.latitude},${position.longitude}';
+} 
+  Future<void> sendSMSWithLocation() async {
+  final location = await getLocation();
+
+  final uri = Uri.parse(
+    'sms:6751107805?body=${Uri.encodeComponent(
+      'hola beto\nMi ubicación es:\n$location',
+    )}',
+  );
+
+  await launchUrl(uri);
+}
+
   int _countdown = 3;
   Timer? _timer;
   late AnimationController _anim;
@@ -555,6 +588,8 @@ class _EmergencyPopupState extends State<EmergencyPopup>
       _countdown = 0;
       _sent = true;
     });
+
+      sendSMSWithLocation();
 
     // simula envío y cierra el popup
     Future.delayed(const Duration(seconds: 2), () {
@@ -714,56 +749,60 @@ void showDetailCard(BuildContext context, InstitucionInfo user) {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // HEADER
-    Row(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        CircleAvatar(
-          radius: 30,
-          backgroundImage: AssetImage(user.image),
-        ),
-        const SizedBox(width: 12),
-        Expanded(
-          child: Text(
-            user.name,
-            style: const TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.w600,
-              color: Colors.deepPurple,
-            ),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              CircleAvatar(
+                radius: 30,
+                backgroundImage: AssetImage(user.image),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Text(
+                  user.name,
+                  style: const TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.deepPurple,
+                  ),
+                ),
+              ),
+            ],
           ),
-        ),
-      ],
-    ),
 
-    const SizedBox(height: 16),
+          const SizedBox(height: 16),
 
-    // INFO
-    InkWell(
-  onTap: () async {
-     final uri = Uri.parse('tel:6751107805');
-    await launchUrl(uri, mode: LaunchMode.externalApplication);
-  },
-    child: Text(
-      user.phone,
-      textAlign: TextAlign.justify,
-      style: const TextStyle(fontSize: 18, 
-      color: Colors.deepPurple,
-      fontWeight: FontWeight.w500,
-      decoration: TextDecoration.underline,),
-      ),
-  ),
-    const SizedBox(height: 8),
-    Text(
-      user.address,
-      textAlign: TextAlign.justify,
-      style: const TextStyle(fontSize: 18, color: Colors.deepPurple,),
-    ),
-    const SizedBox(height: 8),
-    Text(
-      user.description,
-      textAlign: TextAlign.justify,
-      style: const TextStyle(fontSize: 18, color: Colors.deepPurple,),
-    ),
+          // INFO
+          Row(
+            children: [
+              Expanded(
+                child: Text(
+                  user.phone,
+                  style: const TextStyle(fontSize: 18, color: Colors.deepPurple),
+                ),
+              ),
+              IconButton(
+                icon: const Icon(Icons.phone, color: Colors.deepPurple),
+                onPressed: () async {
+                  final uri = Uri.parse('tel:${user.phone}');
+                  await launchUrl(uri, mode: LaunchMode.externalApplication);
+                },
+              ),
+            ],
+          ),
+
+            const SizedBox(height: 8),
+            Text(
+              user.address,
+              textAlign: TextAlign.justify,
+              style: const TextStyle(fontSize: 18, color: Colors.deepPurple,),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              user.description,
+              textAlign: TextAlign.justify,
+              style: const TextStyle(fontSize: 18, color: Colors.deepPurple,),
+            ),
             ],
           ),
         ),
@@ -771,7 +810,7 @@ void showDetailCard(BuildContext context, InstitucionInfo user) {
       ),
       );
     },
-
+    
     transitionBuilder: (_, animation, __, child) {
       return ScaleTransition(
         scale: CurvedAnimation(

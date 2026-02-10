@@ -13,8 +13,8 @@ class _LoadingScreenState extends State<LoadingScreen> {
   Timer? _timer;
 
   final List<String> _images = [
-    'assets/imagenes/img1.jpeg',
-    'assets/imagenes/img2.jpeg',
+    'assets/imagenes/logo_equipo.png',
+    'assets/imagenes/logo_secundaria.png',
   ];
 
   @override

@@ -125,7 +125,7 @@ final ImagePicker _picker = ImagePicker();
   children: [
     CircleAvatar(
       radius: 60,
-      backgroundColor: const Color.fromARGB(255, 255, 227, 227),
+      backgroundColor: const Color(0xFFE6F0D5),
       backgroundImage: _profileImage != null
       ? FileImage(_profileImage!)
       : const AssetImage('assets/avatar.png') as ImageProvider,
@@ -248,7 +248,7 @@ class _InfoTile extends StatelessWidget {
       margin: const EdgeInsets.only(bottom: 12),
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
       decoration: BoxDecoration(
-        color: const Color.fromARGB(255, 255, 222, 222),
+        color: const Color(0xFFE6F0D5),
         borderRadius: BorderRadius.circular(16),
       ),
       child: Row(

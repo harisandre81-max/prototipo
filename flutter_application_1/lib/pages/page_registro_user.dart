@@ -49,26 +49,48 @@ class _RegisterUserState extends State<RegisterUser> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: const Color(0xFFE6F0D5),
-
       body: SafeArea(
         child: Column(
           children: [
-
-
             // LOGO / ESCUDO (PLACEHOLDER)
-            Container(
-              height: 90,
-              width: 120,
-              decoration: BoxDecoration(
-                color: Colors.transparent,
-                borderRadius: BorderRadius.circular(20),
-              ),
-              child: Icon(
-                Icons.shield,
-                size: 90,
-                color: Colors.deepPurple,
-              ),
-            ),
+            Padding(
+  padding: const EdgeInsets.symmetric(horizontal: 16),
+  child: Row(
+    children: [
+      // BOTÓN REGRESAR
+      IconButton(
+        icon: const Icon(
+          Icons.arrow_back,
+          color: Colors.deepPurple,
+          size: 28,
+        ),
+        onPressed: () {
+          Navigator.pop(context);
+        },
+      ),
+
+      const SizedBox(width: 85),
+
+      // LOGO
+      Container(
+        height: 90,
+        width: 120,
+        decoration: BoxDecoration(
+          color: Colors.transparent,
+          borderRadius: BorderRadius.circular(20),
+        ),
+        child: const Icon(
+          Icons.shield,
+          size: 90,
+          color: Colors.deepPurple,
+        ),
+      ),
+
+      const Spacer(),
+    ],
+  ),
+),
+
 
             const SizedBox(height: 15),
 
